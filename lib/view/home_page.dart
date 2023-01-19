@@ -7,10 +7,13 @@ import '../routs/router_helper.dart';
 import '../utils/assets_widget.dart';
 import '../utils/champ_assets.dart';
 import '../utils/preference_manager_utils.dart';
+import '../utils/text_utils.dart';
+import '../viewmodel/question_ans_viewmodel.dart';
 import '../viewmodel/setting_viewmodel.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+  final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +38,11 @@ class HomePage extends StatelessWidget {
               top: 200.sp,
               left: 30.sp,
               child: InkWell(
-                onTap: () =>
-                    Get.toNamed(RouteHelper.getQuestionAnsScreenRoute()),
+                onTap: () {
+                  questionAnsViewModel
+                      .setQuestionList(TextUtils.englishAlphabet);
+                  Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+                },
                 child: ChampAssetsWidget(
                   imagePath: ChampAssets.alphabet,
                   height: 120.sp,

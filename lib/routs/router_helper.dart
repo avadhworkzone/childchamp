@@ -12,9 +12,8 @@ class RouteHelper {
 
   static List<GetPage> routes = [
     GetPage(name: RouterConstant.splash, page: () => const SplashScreen()),
-    GetPage(name: RouterConstant.home, page: () => const HomePage()),
+    GetPage(name: RouterConstant.home, page: () => HomePage()),
     GetPage(
-        name: RouterConstant.questionAnsBoard,
-        page: () => const QuestionAnsScreen())
+        name: RouterConstant.questionAnsBoard, page: () => QuestionAnsScreen())
   ];
 }

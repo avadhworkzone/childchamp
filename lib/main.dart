@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         defaultTransition: Transition.fadeIn,
         scrollBehavior: MyBehavior(),
         theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: false),
-        home: const HomePage(),
+        home: HomePage(),
       );
     });
   }

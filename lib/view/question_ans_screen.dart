@@ -15,13 +15,18 @@ import '../viewmodel/question_ans_viewmodel.dart';
 import '../viewmodel/setting_viewmodel.dart';
 
 class QuestionAnsScreen extends StatelessWidget {
-  const QuestionAnsScreen({Key? key}) : super(key: key);
+  QuestionAnsScreen({Key? key}) : super(key: key);
 
+  final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
   @override
   Widget build(BuildContext context) {
     return Material(
       color: ColorUtils.appWhite,
       child: GetBuilder<QuestionAnsViewModel>(
+        initState: (setState) {
+          questionAnsViewModel.clearQA();
+          managedOption();
+        },
         builder: (questionAnsViewModel) {
           return SizedBox(
             height: Get.height,
@@ -42,28 +47,48 @@ class QuestionAnsScreen extends StatelessWidget {
                 Positioned(
                   top: 200.sp,
                   left: 50.sp,
-                  child: const RoundedOptionWidget(),
+                  child: RoundedOptionWidget(
+                    optionId: questionAnsViewModel.optionList.isEmpty
+                        ? ''
+                        : questionAnsViewModel.optionList[0],
+                    selectAns: onOptionTap,
+                  ),
                 ),
 
                 ///OPTION 2.....
                 Positioned(
                   top: 200.sp,
                   right: 50.sp,
-                  child: const RoundedOptionWidget(),
+                  child: RoundedOptionWidget(
+                    selectAns: onOptionTap,
+                    optionId: questionAnsViewModel.optionList.length < 2
+                        ? ''
+                        : questionAnsViewModel.optionList[1],
+                  ),
                 ),
 
                 ///OPTION 3.....
                 Positioned(
                   top: 325.sp,
                   left: 50.sp,
-                  child: const RoundedOptionWidget(),
+                  child: RoundedOptionWidget(
+                    selectAns: onOptionTap,
+                    optionId: questionAnsViewModel.optionList.length < 3
+                        ? ''
+                        : questionAnsViewModel.optionList[2],
+                  ),
                 ),
 
                 ///OPTION 4.....
                 Positioned(
                   top: 325.sp,
                   right: 50.sp,
-                  child: const RoundedOptionWidget(),
+                  child: RoundedOptionWidget(
+                    selectAns: onOptionTap,
+                    optionId: questionAnsViewModel.optionList.length < 4
+                        ? ''
+                        : questionAnsViewModel.optionList[3],
+                  ),
                 ),
 
                 ///QUESTION BOARD...
@@ -76,12 +101,11 @@ class QuestionAnsScreen extends StatelessWidget {
                     padding: EdgeInsets.only(top: 40.sp),
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage(ChampAssets.boyWithBoard),
+                            image: const AssetImage(ChampAssets.boyWithBoard),
                             scale: 2.5.sp)),
                     child: ChampText(
-                      "A",
-                      // "ક",
-                      // "क",
+                      questionAnsViewModel.questionList[
+                          questionAnsViewModel.selectedOptionIndex],
                       fontSize: 50.sp,
                       textAlign: TextAlign.center,
                       color:
@@ -132,7 +156,7 @@ class QuestionAnsScreen extends StatelessWidget {
                             image: DecorationImage(
                                 image: AssetImage(ChampAssets.roundedSolid))),
                         child: ChampText(
-                          "Win\n1",
+                          "Win\n${questionAnsViewModel.winCount}",
                           textAlign: TextAlign.center,
                           fontSize: 8.sp,
                           color: ColorUtils.appWhite,
@@ -153,7 +177,7 @@ class QuestionAnsScreen extends StatelessWidget {
                             image: DecorationImage(
                                 image: AssetImage(ChampAssets.roundedSolid))),
                         child: ChampText(
-                          "Lost\n1",
+                          "Lost\n${questionAnsViewModel.lostCount}",
                           textAlign: TextAlign.center,
                           fontSize: 8.sp,
                           color: ColorUtils.appWhite,
@@ -186,8 +210,6 @@ class QuestionAnsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                ///RESULT FLAG....
               ],
             ),
           );
@@ -195,10 +217,60 @@ class QuestionAnsScreen extends StatelessWidget {
       ),
     );
   }
+
+  onOptionTap() {
+    if (questionAnsViewModel.selectedOptionIndex ==
+        questionAnsViewModel.questionList.length - 1) {
+      // Get.to(ShowResultAnimation(
+      //   rightAns: false,
+      //   complete: true,
+      // ));
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => ShowResultAnimation(
+                rightAns: false,
+                complete: true,
+              ));
+
+      return;
+    }
+    questionAnsViewModel.selectedOptionIndex++;
+    managedOption();
+  }
+
+  ///GENERATE RANDOM OPTION AND SET ONE ANS.
+  void managedOption() {
+    List<String> tempOptionList = [];
+    for (int optionIndex = 0; optionIndex < 1000; optionIndex++) {
+      if (tempOptionList.length == 4) {
+        break;
+      }
+      final optionText = questionAnsViewModel.questionList[
+          math.Random().nextInt(questionAnsViewModel.questionList.length - 1)];
+      if (!tempOptionList.contains(optionText)) {
+        tempOptionList.add(optionText);
+      }
+    }
+    if (!tempOptionList.contains(questionAnsViewModel
+        .questionList[questionAnsViewModel.selectedOptionIndex])) {
+      tempOptionList.removeAt(0);
+      tempOptionList.insert(
+          math.Random().nextInt(3),
+          questionAnsViewModel
+              .questionList[questionAnsViewModel.selectedOptionIndex]);
+    }
+  }
 }
 
 class RoundedOptionWidget extends StatelessWidget {
-  const RoundedOptionWidget({Key? key}) : super(key: key);
+  const RoundedOptionWidget({
+    Key? key,
+    required this.selectAns,
+    required this.optionId,
+  }) : super(key: key);
+  final VoidCallback selectAns;
+  final String optionId;
   @override
   Widget build(BuildContext context) {
     double imgHeightWidth = 95.sp;
@@ -210,12 +282,31 @@ class RoundedOptionWidget extends StatelessWidget {
       decoration: const BoxDecoration(
           image: DecorationImage(image: AssetImage(ChampAssets.roundedFrame))),
       child: InkWell(
-        onTap: () => showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => const ShowResultAnimation()),
-        child: const ChampAssetsWidget(
-          imagePath: ChampAssets.loadingAnimation,
+        onTap: () async {
+          final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
+          final queId = questionAnsViewModel
+              .questionList[questionAnsViewModel.selectedOptionIndex];
+          if (queId == optionId) {
+            questionAnsViewModel.winCount++;
+          } else {
+            questionAnsViewModel.lostCount++;
+          }
+          await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => ShowResultAnimation(
+                    rightAns: queId == optionId ? true : false,
+                  ));
+          // selectedOptionIndex.value++;
+          selectAns();
+        },
+        child: ChampText(
+          optionId,
+          fontSize: 20.sp,
+          textAlign: TextAlign.center,
+          color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+              .withOpacity(1.0),
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -356,38 +447,45 @@ class SettingDialog extends StatelessWidget {
 }
 
 class ShowResultAnimation extends StatelessWidget {
-  const ShowResultAnimation({Key? key}) : super(key: key);
+  ShowResultAnimation({Key? key, required this.rightAns, this.complete})
+      : super(key: key);
+  final bool rightAns;
+  bool? complete = false;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: GetBuilder<QuestionAnsViewModel>(
-        initState: (setState) {
-          Future.delayed(const Duration(seconds: 4), () {
-            Get.back();
-          });
+    return Material(
+      color: Colors.transparent,
+      child: WillPopScope(
+        onWillPop: () async {
+          return false;
         },
-        builder: (questionAnsViewModel) {
-          return Center(
-            child: Animate()
-                .custom(
-                  duration: const Duration(seconds: 4),
-                  begin: 10,
-                  end: 0,
-                  builder: (_, value, __) => Container(
-                    // color: Colors.orange,
-                    child: ChampAssetsWidget(
-                      imagePath: ChampAssets.rightAnsAnimation,
+        child: GetBuilder<QuestionAnsViewModel>(
+          initState: (setState) {
+            Future.delayed(const Duration(seconds: 4), () {
+              Get.back();
+            });
+          },
+          builder: (questionAnsViewModel) {
+            return Center(
+              child: Animate()
+                  .custom(
+                    duration: const Duration(seconds: 4),
+                    begin: 10,
+                    end: 0,
+                    builder: (_, value, __) => ChampAssetsWidget(
+                      imagePath: complete == true
+                          ? ChampAssets.finishAnimation
+                          : rightAns
+                              ? ChampAssets.rightAnsAnimation
+                              : ChampAssets.wrongAnsAnimation,
                       imageScale: 1.5.sp,
                     ),
-                  ),
-                )
-                .fadeOut(),
-          );
-        },
+                  )
+                  .fadeOut(),
+            );
+          },
+        ),
       ),
     );
   }
