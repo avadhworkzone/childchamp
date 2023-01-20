@@ -1,4 +1,5 @@
 import 'package:childchamp/utils/color_utils.dart';
+import 'package:childchamp/utils/enum_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -35,12 +36,13 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 200.sp,
+              top: 30.h,
               left: 30.sp,
               child: InkWell(
                 onTap: () {
                   questionAnsViewModel
                       .setQuestionList(TextUtils.englishAlphabet);
+                  questionAnsViewModel.questionType = QuestionType.English;
                   Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
                 },
                 child: ChampAssetsWidget(
@@ -51,11 +53,15 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 200.sp,
+              top: 30.h,
               right: 25.sp,
               child: InkWell(
-                onTap: () =>
-                    Get.toNamed(RouteHelper.getQuestionAnsScreenRoute()),
+                onTap: () {
+                  questionAnsViewModel
+                      .setQuestionList(TextUtils.gujaratiVyanjan);
+                  questionAnsViewModel.questionType = QuestionType.Gujrati;
+                  Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+                },
                 child: ChampAssetsWidget(
                   imagePath: ChampAssets.baraKhaDiGujarati,
                   height: 120.sp,
@@ -64,12 +70,15 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 325.sp,
+              top: (30.h + 110.sp),
               right: 80.sp,
               left: 80.sp,
               child: InkWell(
-                onTap: () =>
-                    Get.toNamed(RouteHelper.getQuestionAnsScreenRoute()),
+                onTap: () {
+                  questionAnsViewModel.setQuestionList(TextUtils.hindiVyanjan);
+                  questionAnsViewModel.questionType = QuestionType.Hindi;
+                  Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+                },
                 child: ChampAssetsWidget(
                   imagePath: ChampAssets.baraKhaDiHindi,
                   height: 120.sp,

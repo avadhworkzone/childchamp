@@ -41,8 +41,7 @@ dependencies:
   lottie: ^2.1.0
   flutter_animate: ^2.1.0
   sizer: ^2.0.15
-
-  audioplayers: ^1.2.0
+  just_audio: ^0.9.31
 
 
 dev_dependencies:
@@ -71,7 +70,11 @@ flutter:
   assets:
     - assets/animation/
     - assets/images/
+    - assets/images/english/
+    - assets/images/hindi/
+    - assets/images/gujrati/
     - assets/icons/
+    - assets/sound/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

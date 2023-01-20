@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
+import 'package:childchamp/utils/enum_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class QuestionAnsScreen extends StatelessWidget {
   QuestionAnsScreen({Key? key}) : super(key: key);
 
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -45,11 +48,11 @@ class QuestionAnsScreen extends StatelessWidget {
 
                 ///OPTION 1.....
                 Positioned(
-                  top: 200.sp,
+                  top: 28.h,
                   left: 50.sp,
                   child: RoundedOptionWidget(
                     optionId: questionAnsViewModel.optionList.isEmpty
-                        ? ''
+                        ? 0
                         : questionAnsViewModel.optionList[0],
                     selectAns: onOptionTap,
                   ),
@@ -57,36 +60,36 @@ class QuestionAnsScreen extends StatelessWidget {
 
                 ///OPTION 2.....
                 Positioned(
-                  top: 200.sp,
+                  top: 28.h,
                   right: 50.sp,
                   child: RoundedOptionWidget(
                     selectAns: onOptionTap,
                     optionId: questionAnsViewModel.optionList.length < 2
-                        ? ''
+                        ? 0
                         : questionAnsViewModel.optionList[1],
                   ),
                 ),
 
                 ///OPTION 3.....
                 Positioned(
-                  top: 325.sp,
+                  top: (28.h + 95.sp) + 30.sp,
                   left: 50.sp,
                   child: RoundedOptionWidget(
                     selectAns: onOptionTap,
                     optionId: questionAnsViewModel.optionList.length < 3
-                        ? ''
+                        ? 0
                         : questionAnsViewModel.optionList[2],
                   ),
                 ),
 
                 ///OPTION 4.....
                 Positioned(
-                  top: 325.sp,
+                  top: (28.h + 95.sp) + 30.sp,
                   right: 50.sp,
                   child: RoundedOptionWidget(
                     selectAns: onOptionTap,
                     optionId: questionAnsViewModel.optionList.length < 4
-                        ? ''
+                        ? 0
                         : questionAnsViewModel.optionList[3],
                   ),
                 ),
@@ -105,7 +108,8 @@ class QuestionAnsScreen extends StatelessWidget {
                             scale: 2.5.sp)),
                     child: ChampText(
                       questionAnsViewModel.questionList[
-                          questionAnsViewModel.selectedOptionIndex],
+                              questionAnsViewModel.selectedOptionIndex]
+                          .toUpperCase(),
                       fontSize: 50.sp,
                       textAlign: TextAlign.center,
                       color:
@@ -221,18 +225,13 @@ class QuestionAnsScreen extends StatelessWidget {
   onOptionTap() {
     if (questionAnsViewModel.selectedOptionIndex ==
         questionAnsViewModel.questionList.length - 1) {
-      // Get.to(ShowResultAnimation(
-      //   rightAns: false,
-      //   complete: true,
-      // ));
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => ShowResultAnimation(
-                rightAns: false,
-                complete: true,
-              ));
-
+      Get.dialog(
+        ShowResultAnimation(
+          rightAns: false,
+          complete: true,
+        ),
+        barrierDismissible: false,
+      );
       return;
     }
     questionAnsViewModel.selectedOptionIndex++;
@@ -241,25 +240,23 @@ class QuestionAnsScreen extends StatelessWidget {
 
   ///GENERATE RANDOM OPTION AND SET ONE ANS.
   void managedOption() {
-    List<String> tempOptionList = [];
+    List<int> tempOptionList = [];
     for (int optionIndex = 0; optionIndex < 1000; optionIndex++) {
       if (tempOptionList.length == 4) {
         break;
       }
-      final optionText = questionAnsViewModel.questionList[
-          math.Random().nextInt(questionAnsViewModel.questionList.length - 1)];
-      if (!tempOptionList.contains(optionText)) {
-        tempOptionList.add(optionText);
+      final optionIndex =
+          math.Random().nextInt(questionAnsViewModel.questionList.length - 1);
+      if (!tempOptionList.contains(optionIndex)) {
+        tempOptionList.add(optionIndex);
       }
     }
-    if (!tempOptionList.contains(questionAnsViewModel
-        .questionList[questionAnsViewModel.selectedOptionIndex])) {
+    if (!tempOptionList.contains(questionAnsViewModel.selectedOptionIndex)) {
       tempOptionList.removeAt(0);
       tempOptionList.insert(
-          math.Random().nextInt(3),
-          questionAnsViewModel
-              .questionList[questionAnsViewModel.selectedOptionIndex]);
+          math.Random().nextInt(3), questionAnsViewModel.selectedOptionIndex);
     }
+    questionAnsViewModel.setOptionList(tempOptionList);
   }
 }
 
@@ -270,7 +267,8 @@ class RoundedOptionWidget extends StatelessWidget {
     required this.optionId,
   }) : super(key: key);
   final VoidCallback selectAns;
-  final String optionId;
+  final int optionId;
+
   @override
   Widget build(BuildContext context) {
     double imgHeightWidth = 95.sp;
@@ -278,19 +276,31 @@ class RoundedOptionWidget extends StatelessWidget {
     return Container(
       height: imgHeightWidth,
       width: imgHeightWidth,
-      padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 27.sp),
+      padding: EdgeInsets.fromLTRB(5.sp, 18.sp, 5.sp, 18.sp),
+
+      // padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 27.sp),
       decoration: const BoxDecoration(
           image: DecorationImage(image: AssetImage(ChampAssets.roundedFrame))),
       child: InkWell(
         onTap: () async {
           final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
-          final queId = questionAnsViewModel
-              .questionList[questionAnsViewModel.selectedOptionIndex];
+          final queId = questionAnsViewModel.selectedOptionIndex;
           if (queId == optionId) {
             questionAnsViewModel.winCount++;
+            if (PreferenceManagerUtils.getPreference(
+                    PreferenceManagerUtils.volume) ==
+                true) {
+              SoundService.setPlayer('assets/sound/winnersound.mp3');
+            }
           } else {
             questionAnsViewModel.lostCount++;
+            if (PreferenceManagerUtils.getPreference(
+                    PreferenceManagerUtils.volume) ==
+                true) {
+              SoundService.setPlayer('assets/sound/lostsound.mp3');
+            }
           }
+
           await showDialog(
               context: context,
               barrierDismissible: false,
@@ -300,14 +310,17 @@ class RoundedOptionWidget extends StatelessWidget {
           // selectedOptionIndex.value++;
           selectAns();
         },
-        child: ChampText(
-          optionId,
-          fontSize: 20.sp,
-          textAlign: TextAlign.center,
-          color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-              .withOpacity(1.0),
-          fontWeight: FontWeight.bold,
-        ),
+        child: GetBuilder<QuestionAnsViewModel>(builder: (con) {
+          return ChampAssetsWidget(
+            imagePath: con.questionType == QuestionType.English
+                ? 'assets/images/english/eng${optionId + 1}.png'
+                : con.questionType == QuestionType.Hindi
+                    ? 'assets/images/hindi/hin${optionId + 1}.png'
+                    : 'assets/images/gujrati/guj${optionId + 1}.png',
+            imageScale: 1.5.sp,
+            boxFit: BoxFit.contain,
+          );
+        }),
       ),
     );
   }
@@ -327,8 +340,8 @@ class SettingDialog extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned(
-                  top: 200.sp,
-                  bottom: 200.sp,
+                  top: 30.h,
+                  bottom: 35.h,
                   right: 0,
                   left: 0,
                   child: const ChampAssetsWidget(
@@ -336,7 +349,7 @@ class SettingDialog extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  bottom: 210.sp,
+                  bottom: 35.h,
                   right: 130.sp,
                   left: 130.sp,
                   child: InkWell(
@@ -359,7 +372,7 @@ class SettingDialog extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: 280.sp,
+                  top: 42.h,
                   right: 30.sp,
                   left: 40.sp,
                   child: Row(

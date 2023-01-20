@@ -1,6 +1,16 @@
+import 'package:childchamp/utils/enum_utils.dart';
 import 'package:get/get.dart';
 
 class QuestionAnsViewModel extends GetxController {
+  QuestionType _questionType = QuestionType.English;
+
+  QuestionType get questionType => _questionType;
+
+  set questionType(QuestionType value) {
+    _questionType = value;
+    update();
+  }
+
   bool _isResult = false;
 
   bool get isResult => _isResult;
@@ -30,18 +40,18 @@ class QuestionAnsViewModel extends GetxController {
     update();
   }
 
-  List<String> _optionList = <String>[];
+  List<int> _optionList = <int>[];
 
-  List<String> get optionList => _optionList;
+  List<int> get optionList => _optionList;
 
-  void setOptionList(List<String> value) {
+  void setOptionList(List<int> value) {
     _optionList = value;
     update();
   }
 
   ///CLEAR QA
   void clearQA() {
-    _selectedOptionIndex = 22;
+    _selectedOptionIndex = 0;
     _winCount = 0;
     _lostCount = 0;
     _optionList.clear();
