@@ -1,3 +1,4 @@
+import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/color_utils.dart';
 import 'package:childchamp/utils/enum_utils.dart';
 import 'package:flutter/material.dart';
@@ -93,10 +94,15 @@ class HomePage extends StatelessWidget {
                 builder: (settingsViewModel) {
                   return InkWell(
                     onTap: () async {
-                      settingsViewModel.music = !settingsViewModel.music;
+                      settingsViewModel.bgMusic = !settingsViewModel.bgMusic;
                       await PreferenceManagerUtils.setPreference(
-                          PreferenceManagerUtils.music,
-                          settingsViewModel.music);
+                          PreferenceManagerUtils.bgMusic,
+                          settingsViewModel.bgMusic);
+                      if (!settingsViewModel.bgMusic) {
+                        SoundService.stopBgPlayer();
+                      } else {
+                        SoundService.resumeBgPlayer();
+                      }
                     },
                     child: Container(
                       height: 40.sp,
@@ -109,7 +115,7 @@ class HomePage extends StatelessWidget {
                           image: DecorationImage(
                               image: AssetImage(ChampAssets.squareSolid))),
                       child: Icon(
-                        settingsViewModel.music
+                        settingsViewModel.bgMusic
                             ? Icons.music_note
                             : Icons.music_off,
                         color: ColorUtils.appWhite,

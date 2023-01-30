@@ -1,3 +1,4 @@
+import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,12 +34,16 @@ class _SplashScreenState extends State<SplashScreen> {
     return Material(
       color: ColorUtils.appWhite,
       child: GetBuilder<SettingsViewModel>(
-        initState: (setState) {
+        initState: (setState) async {
           final settingsViewModel = Get.find<SettingsViewModel>();
           settingsViewModel.initVolume = PreferenceManagerUtils.getPreference(
               PreferenceManagerUtils.volume);
-          settingsViewModel.initMusic = PreferenceManagerUtils.getPreference(
-              PreferenceManagerUtils.music);
+          settingsViewModel.initBgMusic = PreferenceManagerUtils.getPreference(
+              PreferenceManagerUtils.bgMusic);
+          await SoundService.setBgPlayerPath();
+          if(settingsViewModel.bgMusic){
+            SoundService.playBgPlayer();
+          }
         },
         builder: (settingsViewModel) {
           return Lottie.asset(ChampAssets.splashAnimation);

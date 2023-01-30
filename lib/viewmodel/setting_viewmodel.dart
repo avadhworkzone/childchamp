@@ -14,14 +14,14 @@ class SettingsViewModel extends GetxController {
   }
 
   ///SET FOR MUSIC
-  bool _music = true;
-  bool get music => _music;
-  set initMusic(bool value) {
-    _music = value;
+  bool _bgMusic = true;
+  bool get bgMusic => _bgMusic;
+  set initBgMusic(bool value) {
+    _bgMusic = value;
   }
 
-  set music(bool value) {
-    _music = value;
+  set bgMusic(bool value) {
+    _bgMusic = value;
     update();
   }
 }

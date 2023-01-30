@@ -4,7 +4,7 @@ class PreferenceManagerUtils {
   static GetStorage getStorage = GetStorage();
 
   static String volume = "volume";
-  static String music = "music";
+  static String bgMusic = "bgMusic";
 
   ///SET BOOL VALUE....
   ///isVolume

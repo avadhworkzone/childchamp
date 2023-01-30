@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/enum_utils.dart';
+import 'package:childchamp/utils/sound_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -290,14 +291,14 @@ class RoundedOptionWidget extends StatelessWidget {
             if (PreferenceManagerUtils.getPreference(
                     PreferenceManagerUtils.volume) ==
                 true) {
-              SoundService.setPlayer('assets/sound/winnersound.mp3');
+              SoundService.setPlayer(SoundUtils.winSound);
             }
           } else {
             questionAnsViewModel.lostCount++;
             if (PreferenceManagerUtils.getPreference(
                     PreferenceManagerUtils.volume) ==
                 true) {
-              SoundService.setPlayer('assets/sound/lostsound.mp3');
+              SoundService.setPlayer(SoundUtils.lostSound);
             }
           }
 
@@ -405,10 +406,15 @@ class SettingDialog extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () async {
-                          settingsViewModel.music = !settingsViewModel.music;
+                          settingsViewModel.bgMusic = !settingsViewModel.bgMusic;
                           await PreferenceManagerUtils.setPreference(
-                              PreferenceManagerUtils.music,
-                              settingsViewModel.music);
+                              PreferenceManagerUtils.bgMusic,
+                              settingsViewModel.bgMusic);
+                          if (!settingsViewModel.bgMusic) {
+                            SoundService.stopBgPlayer();
+                          } else {
+                            SoundService.resumeBgPlayer();
+                          }
                         },
                         child: Container(
                           height: 50.sp,
@@ -421,7 +427,7 @@ class SettingDialog extends StatelessWidget {
                               image: DecorationImage(
                                   image: AssetImage(ChampAssets.roundedSolid))),
                           child: Icon(
-                            settingsViewModel.music
+                            settingsViewModel.bgMusic
                                 ? Icons.music_note
                                 : Icons.music_off,
                             color: ColorUtils.appWhite,
