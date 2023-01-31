@@ -17,10 +17,53 @@ import '../utils/preference_manager_utils.dart';
 import '../viewmodel/question_ans_viewmodel.dart';
 import '../viewmodel/setting_viewmodel.dart';
 
-class QuestionAnsScreen extends StatelessWidget {
+class QuestionAnsScreen extends StatefulWidget {
   QuestionAnsScreen({Key? key}) : super(key: key);
 
+  @override
+  State<QuestionAnsScreen> createState() => _QuestionAnsScreenState();
+}
+
+class _QuestionAnsScreenState extends State<QuestionAnsScreen> with WidgetsBindingObserver {
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
+  bool isBackGround = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      isBackGround = true;
+      stopBgMusic();
+    } else if (state == AppLifecycleState.resumed) {
+      isBackGround = false;
+      playBgMusic();
+    }
+  }
+
+  void playBgMusic()  {
+    print(
+        'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(
+            PreferenceManagerUtils.bgMusic)}');
+    if (PreferenceManagerUtils.getPreference(
+        PreferenceManagerUtils.bgMusic) && !isBackGround) {
+      SoundService.playBgPlayer();
+    }
+  }
+
+  void stopBgMusic(){
+    SoundService.stopBgPlayer();
+  }
+
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -13,10 +13,55 @@ import '../utils/text_utils.dart';
 import '../viewmodel/question_ans_viewmodel.dart';
 import '../viewmodel/setting_viewmodel.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage>
+    with WidgetsBindingObserver {
+  bool isBackGround = false;
+
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
 
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      isBackGround = true;
+      stopBgMusic();
+    } else if (state == AppLifecycleState.resumed) {
+      isBackGround = false;
+      playBgMusic();
+    }
+  }
+
+  void playBgMusic()  {
+    print(
+        'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(
+            PreferenceManagerUtils.bgMusic)}');
+    if (PreferenceManagerUtils.getPreference(
+        PreferenceManagerUtils.bgMusic) && !isBackGround) {
+      SoundService.playBgPlayer();
+    }
+  }
+
+  void stopBgMusic(){
+    SoundService.stopBgPlayer();
+  }
+
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Material(

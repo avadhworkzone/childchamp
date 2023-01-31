@@ -16,10 +16,14 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with WidgetsBindingObserver {
+  bool isBackGround = false;
+  final settingsViewModel = Get.find<SettingsViewModel>();
+
   @override
   void initState() {
-    // TODO: implement initState
+    WidgetsBinding.instance.addObserver(this);
     Future.delayed(
       const Duration(seconds: 2),
       () {
@@ -30,20 +34,47 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      isBackGround = true;
+      stopBgMusic();
+    } else if (state == AppLifecycleState.resumed) {
+      isBackGround = false;
+      playBgMusic();
+    }
+  }
+
+  void playBgMusic()  {
+    print(
+        'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${settingsViewModel.bgMusic}');
+    if (settingsViewModel.bgMusic && !isBackGround) {
+      SoundService.playBgPlayer();
+    }
+  }
+
+  void stopBgMusic(){
+    SoundService.stopBgPlayer();
+  }
+
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: ColorUtils.appWhite,
       child: GetBuilder<SettingsViewModel>(
         initState: (setState) async {
-          final settingsViewModel = Get.find<SettingsViewModel>();
           settingsViewModel.initVolume = PreferenceManagerUtils.getPreference(
               PreferenceManagerUtils.volume);
           settingsViewModel.initBgMusic = PreferenceManagerUtils.getPreference(
               PreferenceManagerUtils.bgMusic);
           await SoundService.setBgPlayerPath();
-          if(settingsViewModel.bgMusic){
-            SoundService.playBgPlayer();
-          }
+          playBgMusic();
         },
         builder: (settingsViewModel) {
           return Lottie.asset(ChampAssets.splashAnimation);
