@@ -43,6 +43,11 @@ dependencies:
   sizer: ^2.0.15
   just_audio: ^0.9.31
 
+  # FIREBASE
+  firebase_core: ^2.4.1
+  firebase_crashlytics: ^3.0.11
+
+
 
 dev_dependencies:
   flutter_test:

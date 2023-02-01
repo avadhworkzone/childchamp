@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "631906996519",
+    "project_id": "child-champ-7b092",
+    "storage_bucket": "child-champ-7b092.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631906996519:android:aa50e2d5bc6a074fd41902",
+        "android_client_info": {
+          "package_name": "com.kids.childchamp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631906996519-srl732lvidjdt0viho4n0dk5a7tk2co5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOaNg1G72OB2XgeXo2TovP2VsO4pqZD3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631906996519-srl732lvidjdt0viho4n0dk5a7tk2co5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

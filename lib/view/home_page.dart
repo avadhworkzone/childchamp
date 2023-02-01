@@ -1,6 +1,9 @@
+import 'package:childchamp/dialog/final_result_dialog.dart';
 import 'package:childchamp/service/sound_service.dart';
+import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/color_utils.dart';
 import 'package:childchamp/utils/enum_utils.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -20,8 +23,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool isBackGround = false;
 
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
@@ -31,6 +33,7 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
@@ -42,26 +45,25 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  void playBgMusic()  {
+  void playBgMusic() {
     print(
-        'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(
-            PreferenceManagerUtils.bgMusic)}');
-    if (PreferenceManagerUtils.getPreference(
-        PreferenceManagerUtils.bgMusic) && !isBackGround) {
+        'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic)}');
+    if (PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic) &&
+        !isBackGround) {
       SoundService.playBgPlayer();
     }
   }
 
-  void stopBgMusic(){
+  void stopBgMusic() {
     SoundService.stopBgPlayer();
   }
-
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -86,10 +88,12 @@ class _HomePageState extends State<HomePage>
               left: 30.sp,
               child: InkWell(
                 onTap: () {
+
                   questionAnsViewModel
                       .setQuestionList(TextUtils.englishAlphabet);
                   questionAnsViewModel.questionType = QuestionType.English;
                   Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+
                 },
                 child: ChampAssetsWidget(
                   imagePath: ChampAssets.alphabet,
@@ -176,3 +180,4 @@ class _HomePageState extends State<HomePage>
     );
   }
 }
+

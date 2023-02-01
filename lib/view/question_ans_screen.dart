@@ -1,5 +1,9 @@
+import 'dart:developer';
 import 'dart:math' as math;
 
+import 'package:childchamp/dialog/ans_animation_dialog.dart';
+import 'package:childchamp/dialog/final_result_dialog.dart';
+import 'package:childchamp/dialog/setting_dialog.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/enum_utils.dart';
@@ -24,7 +28,8 @@ class QuestionAnsScreen extends StatefulWidget {
   State<QuestionAnsScreen> createState() => _QuestionAnsScreenState();
 }
 
-class _QuestionAnsScreenState extends State<QuestionAnsScreen> with WidgetsBindingObserver {
+class _QuestionAnsScreenState extends State<QuestionAnsScreen>
+    with WidgetsBindingObserver {
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
   bool isBackGround = false;
 
@@ -33,6 +38,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen> with WidgetsBindi
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
@@ -44,20 +50,18 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen> with WidgetsBindi
     }
   }
 
-  void playBgMusic()  {
+  void playBgMusic() {
     print(
-        'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(
-            PreferenceManagerUtils.bgMusic)}');
-    if (PreferenceManagerUtils.getPreference(
-        PreferenceManagerUtils.bgMusic) && !isBackGround) {
+        'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic)}');
+    if (PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic) &&
+        !isBackGround) {
       SoundService.playBgPlayer();
     }
   }
 
-  void stopBgMusic(){
+  void stopBgMusic() {
     SoundService.stopBgPlayer();
   }
-
 
   @override
   void dispose() {
@@ -236,9 +240,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen> with WidgetsBindi
                         width: 100.sp,
                       ),
                       InkWell(
-                        onTap: () => showDialog(
-                            context: context,
-                            builder: (context) => const SettingDialog()),
+                        onTap: () => settingDialog(),
                         child: Container(
                           height: 40.sp,
                           width: 40.sp,
@@ -266,16 +268,12 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen> with WidgetsBindi
     );
   }
 
-  onOptionTap() {
+  onOptionTap() async {
     if (questionAnsViewModel.selectedOptionIndex ==
         questionAnsViewModel.questionList.length - 1) {
-      Get.dialog(
-        ShowResultAnimation(
-          rightAns: false,
-          complete: true,
-        ),
-        barrierDismissible: false,
-      );
+      await finalResultDialog();
+      questionAnsViewModel.clearQA();
+      managedOption();
       return;
     }
     questionAnsViewModel.selectedOptionIndex++;
@@ -345,13 +343,10 @@ class RoundedOptionWidget extends StatelessWidget {
             }
           }
 
-          await showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => ShowResultAnimation(
-                    rightAns: queId == optionId ? true : false,
-                  ));
-          // selectedOptionIndex.value++;
+          await ansAnimationDialog(
+            rightAns: queId == optionId ? true : false,
+          );
+
           selectAns();
         },
         child: GetBuilder<QuestionAnsViewModel>(builder: (con) {
@@ -365,189 +360,6 @@ class RoundedOptionWidget extends StatelessWidget {
             boxFit: BoxFit.contain,
           );
         }),
-      ),
-    );
-  }
-}
-
-class SettingDialog extends StatelessWidget {
-  const SettingDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: GetBuilder<SettingsViewModel>(
-        builder: (settingsViewModel) {
-          return InkWell(
-            onTap: () => Get.back(),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 30.h,
-                  bottom: 35.h,
-                  right: 0,
-                  left: 0,
-                  child: const ChampAssetsWidget(
-                    imagePath: ChampAssets.settingDialogBg,
-                  ),
-                ),
-                Positioned(
-                  bottom: 35.h,
-                  right: 130.sp,
-                  left: 130.sp,
-                  child: InkWell(
-                    onTap: () => Get.back(),
-                    child: Container(
-                      height: 50.sp,
-                      width: 50.sp,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 5.sp,
-                      ),
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(ChampAssets.roundedSolid))),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        color: ColorUtils.appWhite,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 42.h,
-                  right: 30.sp,
-                  left: 40.sp,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          settingsViewModel.volume = !settingsViewModel.volume;
-                          await PreferenceManagerUtils.setPreference(
-                              PreferenceManagerUtils.volume,
-                              settingsViewModel.volume);
-                        },
-                        child: Container(
-                          height: 50.sp,
-                          width: 50.sp,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 5.sp,
-                          ),
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(ChampAssets.roundedSolid))),
-                          child: Icon(
-                            settingsViewModel.volume
-                                ? Icons.volume_up
-                                : Icons.volume_off,
-                            color: ColorUtils.appWhite,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          settingsViewModel.bgMusic = !settingsViewModel.bgMusic;
-                          await PreferenceManagerUtils.setPreference(
-                              PreferenceManagerUtils.bgMusic,
-                              settingsViewModel.bgMusic);
-                          if (!settingsViewModel.bgMusic) {
-                            SoundService.stopBgPlayer();
-                          } else {
-                            SoundService.resumeBgPlayer();
-                          }
-                        },
-                        child: Container(
-                          height: 50.sp,
-                          width: 50.sp,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 5.sp,
-                          ),
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(ChampAssets.roundedSolid))),
-                          child: Icon(
-                            settingsViewModel.bgMusic
-                                ? Icons.music_note
-                                : Icons.music_off,
-                            color: ColorUtils.appWhite,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () =>
-                            Get.offAllNamed(RouteHelper.getHomePageRoute()),
-                        child: Container(
-                          height: 50.sp,
-                          width: 50.sp,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 5.sp,
-                          ),
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(ChampAssets.roundedSolid))),
-                          child: const Icon(
-                            Icons.menu,
-                            color: ColorUtils.appWhite,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class ShowResultAnimation extends StatelessWidget {
-  ShowResultAnimation({Key? key, required this.rightAns, this.complete})
-      : super(key: key);
-  final bool rightAns;
-  bool? complete = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
-        child: GetBuilder<QuestionAnsViewModel>(
-          initState: (setState) {
-            Future.delayed(const Duration(seconds: 4), () {
-              Get.back();
-            });
-          },
-          builder: (questionAnsViewModel) {
-            return Center(
-              child: Animate()
-                  .custom(
-                    duration: const Duration(seconds: 4),
-                    begin: 10,
-                    end: 0,
-                    builder: (_, value, __) => ChampAssetsWidget(
-                      imagePath: complete == true
-                          ? ChampAssets.finishAnimation
-                          : rightAns
-                              ? ChampAssets.rightAnsAnimation
-                              : ChampAssets.wrongAnsAnimation,
-                      imageScale: 1.5.sp,
-                    ),
-                  )
-                  .fadeOut(),
-            );
-          },
-        ),
       ),
     );
   }
