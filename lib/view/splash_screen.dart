@@ -1,3 +1,4 @@
+import 'package:childchamp/dialog/update_version_dialog.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/color_utils.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+
     Future.delayed(
       const Duration(seconds: 2),
       () {
@@ -44,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
-  void playBgMusic()  {
+  void playBgMusic() {
     print(
         'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${settingsViewModel.bgMusic}');
     if (settingsViewModel.bgMusic && !isBackGround) {
@@ -52,10 +54,9 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
-  void stopBgMusic(){
+  void stopBgMusic() {
     SoundService.stopBgPlayer();
   }
-
 
   @override
   void dispose() {

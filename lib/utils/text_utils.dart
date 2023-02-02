@@ -1,5 +1,16 @@
+import 'package:package_info_plus/package_info_plus.dart';
+
 class TextUtils {
-  static const appName = "Child Champ";
+  static const appName = "Kids Champ";
+  static const updateMsg =
+      'A new version is available. Update the app to continue.';
+  static String appVersion = "";
+
+  static getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appVersion = packageInfo.version;
+    // buildNumber = packageInfo.buildNumber;
+  }
 
   static const hindiSwar = [
     'अ',

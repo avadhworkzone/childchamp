@@ -46,6 +46,13 @@ dependencies:
   # FIREBASE
   firebase_core: ^2.4.1
   firebase_crashlytics: ^3.0.11
+  cloud_firestore: ^4.3.1
+
+  # PACKAGE INFO
+  package_info_plus: ^3.0.2
+
+  # OPEN PLAY STORE OR APP STORE
+  open_store: ^0.5.0
 
 
 

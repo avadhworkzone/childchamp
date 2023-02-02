@@ -22,6 +22,8 @@ class ChampAssets {
   static const String boyWithBoard = '${imagePath}boy_with_board.png';
   static const String a = '${imagePath}A.png';
   static const String settingDialogBg = '${imagePath}setting_dialog_bg.png';
+  static const String updateDialogBg = '${imagePath}updateDialogBg.png';
+  static const String updateBtn = '${imagePath}updateBtn.png';
   static const String failImage = '${imagePath}failImage.png';
   static const String winnerImage = '${imagePath}winnerImage.png';
   static const String resultDialogBg = '${imagePath}resultDialogBg.png';

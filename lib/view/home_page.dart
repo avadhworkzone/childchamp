@@ -1,4 +1,5 @@
 import 'package:childchamp/dialog/final_result_dialog.dart';
+import 'package:childchamp/dialog/update_version_dialog.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/color_utils.dart';
@@ -31,6 +32,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      checkAppVersion();
+    });
     super.initState();
   }
 
@@ -89,11 +93,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               child: InkWell(
                 onTap: () {
 
-                  questionAnsViewModel
-                      .setQuestionList(TextUtils.englishAlphabet);
-                  questionAnsViewModel.questionType = QuestionType.English;
-                  Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
-
+                  // questionAnsViewModel
+                  //     .setQuestionList(TextUtils.englishAlphabet);
+                  // questionAnsViewModel.questionType = QuestionType.English;
+                  // Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+                  updateVersionDialog();
                 },
                 child: ChampAssetsWidget(
                   imagePath: ChampAssets.alphabet,
