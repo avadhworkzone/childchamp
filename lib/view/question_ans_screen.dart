@@ -35,6 +35,8 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
 
   @override
   void initState() {
+    questionAnsViewModel.clearQA();
+    managedOption();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -74,10 +76,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
     return Material(
       color: ColorUtils.appWhite,
       child: GetBuilder<QuestionAnsViewModel>(
-        initState: (setState) {
-          questionAnsViewModel.clearQA();
-          managedOption();
-        },
+
         builder: (questionAnsViewModel) {
           return SizedBox(
             height: Get.height,
@@ -332,14 +331,14 @@ class RoundedOptionWidget extends StatelessWidget {
             if (PreferenceManagerUtils.getPreference(
                     PreferenceManagerUtils.volume) ==
                 true) {
-              SoundService.setPlayer(SoundUtils.winSound);
+              // SoundService.setPlayer(SoundUtils.winSound);
             }
           } else {
             questionAnsViewModel.lostCount++;
             if (PreferenceManagerUtils.getPreference(
                     PreferenceManagerUtils.volume) ==
                 true) {
-              SoundService.setPlayer(SoundUtils.lostSound);
+              // SoundService.setPlayer(SoundUtils.lostSound);
             }
           }
 

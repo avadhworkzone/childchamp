@@ -28,4 +28,7 @@ class ChampAssets {
   static const String winnerImage = '${imagePath}winnerImage.png';
   static const String resultDialogBg = '${imagePath}resultDialogBg.png';
   static const String resultTitleImg = '${imagePath}resultTitleImg.png';
+  static const String splashScreen = '${imagePath}splashScreen.png';
+  static const String champImg = '${imagePath}champImg.png';
+  static const String kidsImg = '${imagePath}kidsImg.png';
 }

@@ -24,18 +24,37 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   bool isBackGround = false;
-
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
+  late AnimationController lngAnimationController;
+  late Animation<double> lngAnimation;
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    _selectingLangAnimation();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       checkAppVersion();
+      playBgMusic();
     });
     super.initState();
+  }
+
+  _selectingLangAnimation() {
+    lngAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+    lngAnimation =
+        Tween<double>(begin: 0.0, end: 120.sp).animate(CurvedAnimation(
+      parent: lngAnimationController,
+      curve: Curves.bounceOut,
+    ));
+    Future.delayed(Duration(milliseconds: 500), () {
+      lngAnimationController.forward();
+    });
   }
 
   @override
@@ -91,54 +110,47 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               top: 30.h,
               left: 30.sp,
               child: InkWell(
-                onTap: () {
-
-                  // questionAnsViewModel
-                  //     .setQuestionList(TextUtils.englishAlphabet);
-                  // questionAnsViewModel.questionType = QuestionType.English;
-                  // Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
-                  updateVersionDialog();
-                },
-                child: ChampAssetsWidget(
-                  imagePath: ChampAssets.alphabet,
-                  height: 120.sp,
-                  width: 120.sp,
-                ),
-              ),
+                  onTap: () {
+                    questionAnsViewModel
+                        .setQuestionList(TextUtils.englishAlphabet);
+                    questionAnsViewModel.questionType = QuestionType.English;
+                    Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+                  },
+                  child: AnimationBox(
+                    lngAnimation: lngAnimation,
+                    img: ChampAssets.alphabet,
+                  )),
             ),
             Positioned(
               top: 30.h,
               right: 25.sp,
               child: InkWell(
-                onTap: () {
-                  questionAnsViewModel
-                      .setQuestionList(TextUtils.gujaratiVyanjan);
-                  questionAnsViewModel.questionType = QuestionType.Gujrati;
-                  Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
-                },
-                child: ChampAssetsWidget(
-                  imagePath: ChampAssets.baraKhaDiGujarati,
-                  height: 120.sp,
-                  width: 120.sp,
-                ),
-              ),
+                  onTap: () {
+                    questionAnsViewModel
+                        .setQuestionList(TextUtils.gujaratiVyanjan);
+                    questionAnsViewModel.questionType = QuestionType.Gujrati;
+                    Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+                  },
+                  child: AnimationBox(
+                    lngAnimation: lngAnimation,
+                    img: ChampAssets.baraKhaDiGujarati,
+                  )),
             ),
             Positioned(
               top: (30.h + 110.sp),
               right: 80.sp,
               left: 80.sp,
               child: InkWell(
-                onTap: () {
-                  questionAnsViewModel.setQuestionList(TextUtils.hindiVyanjan);
-                  questionAnsViewModel.questionType = QuestionType.Hindi;
-                  Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
-                },
-                child: ChampAssetsWidget(
-                  imagePath: ChampAssets.baraKhaDiHindi,
-                  height: 120.sp,
-                  width: 120.sp,
-                ),
-              ),
+                  onTap: () {
+                    questionAnsViewModel
+                        .setQuestionList(TextUtils.hindiVyanjan);
+                    questionAnsViewModel.questionType = QuestionType.Hindi;
+                    Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
+                  },
+                  child: AnimationBox(
+                    lngAnimation: lngAnimation,
+                    img: ChampAssets.baraKhaDiHindi,
+                  )),
             ),
             Positioned(
               top: 35.sp,
@@ -185,3 +197,27 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 }
 
+class AnimationBox extends StatelessWidget {
+  const AnimationBox({
+    Key? key,
+    required this.lngAnimation,
+    required this.img,
+  }) : super(key: key);
+
+  final Animation<double> lngAnimation;
+  final String img;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: lngAnimation,
+      builder: (context, child) {
+        return ChampAssetsWidget(
+          imagePath: img,
+          height: lngAnimation.value,
+          width: lngAnimation.value,
+        );
+      },
+    );
+  }
+}
