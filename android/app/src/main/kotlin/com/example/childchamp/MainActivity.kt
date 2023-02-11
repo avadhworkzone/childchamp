@@ -1,4 +1,4 @@
-package com.kids.childchamp
+package com.madvise.child_champ
 
 import io.flutter.embedding.android.FlutterActivity
 

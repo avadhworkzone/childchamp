@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kids.childchamp">
+    package="com.madvise.child_champ">
+<!--    package="com.madvise.child_champ">-->
    <application
-        android:label="Kids Champ"
+        android:label="Child Champ"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

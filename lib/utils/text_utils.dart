@@ -1,7 +1,7 @@
 import 'package:package_info_plus/package_info_plus.dart';
 
 class TextUtils {
-  static const appName = "Kids Champ";
+  static const appName = "Child Champ";
   static const updateMsg =
       'A new version is available. Update the app to continue.';
   static String appVersion = "";
@@ -9,6 +9,10 @@ class TextUtils {
   static getAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion = packageInfo.version;
+    // print("APP BUILD APP ${appName}");
+    print("APP BUILD APP ${packageInfo}");
+    // print("APP BUILD APP ${packageInfo.buildNumber}");
+    // print("APP BUILD APP ${appVersion}");
     // buildNumber = packageInfo.buildNumber;
   }
 
@@ -59,7 +63,6 @@ class TextUtils {
     'ह',
     'क्ष',
     'ज्ञ'
-
   ];
 
   static const gujaratiSwar = [

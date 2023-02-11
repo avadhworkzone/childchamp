@@ -1,13 +1,8 @@
 import 'dart:io';
 
-import 'package:childchamp/routs/router_helper.dart';
-import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/assets_widget.dart';
 import 'package:childchamp/utils/champ_assets.dart';
 import 'package:childchamp/utils/champ_text.dart';
-import 'package:childchamp/utils/color_utils.dart';
-import 'package:childchamp/utils/const_utils.dart';
-import 'package:childchamp/utils/preference_manager_utils.dart';
 import 'package:childchamp/utils/text_utils.dart';
 import 'package:childchamp/viewmodel/setting_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,10 +49,7 @@ Future<void> checkAppVersion() async {
 }
 
 void updateVersionDialog() {
-  Get.dialog(
-    const SettingDialog(),
-    barrierDismissible: false
-  );
+  Get.dialog(const SettingDialog(), barrierDismissible: false);
 }
 
 class SettingDialog extends StatelessWidget {
@@ -102,11 +94,11 @@ class SettingDialog extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 35.h - (3.2.w / 2)),
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         OpenStore.instance.open(
                           appStoreId: '', // AppStore id of your app
                           androidAppBundleId:
-                          'com.kids.childchamp', // Android app bundle package name
+                              'com.madvise.child_champ', // Android app bundle package name
                         );
                       },
                       child: ChampAssetsWidget(
