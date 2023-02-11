@@ -7,7 +7,7 @@ import 'package:childchamp/utils/preference_manager_utils.dart';
 import 'package:childchamp/viewmodel/setting_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 void settingDialog() {
   Get.dialog(const SettingDialog());
@@ -51,9 +51,10 @@ class SettingDialog extends StatelessWidget {
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(ChampAssets.roundedSolid))),
-                      child: const Icon(
+                      child: Icon(
                         Icons.close_rounded,
                         color: ColorUtils.appWhite,
+                        size: 15.sp,
                       ),
                     ),
                   ),
@@ -87,6 +88,7 @@ class SettingDialog extends StatelessWidget {
                                 ? Icons.volume_up
                                 : Icons.volume_off,
                             color: ColorUtils.appWhite,
+                            size: 15.sp,
                           ),
                         ),
                       ),
@@ -118,6 +120,7 @@ class SettingDialog extends StatelessWidget {
                                 ? Icons.music_note
                                 : Icons.music_off,
                             color: ColorUtils.appWhite,
+                            size: 15.sp,
                           ),
                         ),
                       ),
@@ -134,9 +137,10 @@ class SettingDialog extends StatelessWidget {
                           decoration: const BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(ChampAssets.roundedSolid))),
-                          child: const Icon(
+                          child:  Icon(
                             Icons.menu,
                             color: ColorUtils.appWhite,
+                            size: 15.sp,
                           ),
                         ),
                       ),

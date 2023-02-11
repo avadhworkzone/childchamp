@@ -6,7 +6,7 @@ import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/viewmodel/question_ans_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 Future<dynamic> finalResultDialog() async {
   await Get.dialog(
@@ -51,7 +51,7 @@ class ResultDialog extends StatelessWidget {
                       children: [
                         ChampAssetsWidget(
                           imagePath: ChampAssets.resultTitleImg,
-                          imageScale: 2.8.w,
+                          imageScale:Get.height>1000? 0.7.w:3.w,
                         ),
                         SizedBox(
                           height: 8.h,
@@ -133,7 +133,7 @@ class ResultDialog extends StatelessWidget {
                                   35
                               ? ChampAssets.failImage
                               : ChampAssets.winnerImage,
-                          imageScale: 5.5.sp,
+                          imageScale: 0.6.h,
                         ),
                         SizedBox(
                           height: 5.h,
@@ -158,9 +158,10 @@ class ResultDialog extends StatelessWidget {
                                       image: DecorationImage(
                                           image: AssetImage(
                                               ChampAssets.roundedSolid))),
-                                  child: const Icon(
+                                  child:  Icon(
                                     Icons.refresh,
                                     color: ColorUtils.appWhite,
+                                    size: 15.sp,
                                   ),
                                 ),
                               ),
@@ -183,9 +184,10 @@ class ResultDialog extends StatelessWidget {
                                       image: DecorationImage(
                                           image: AssetImage(
                                               ChampAssets.roundedSolid))),
-                                  child: const Icon(
+                                  child:  Icon(
                                     Icons.menu,
                                     color: ColorUtils.appWhite,
+                                    size: 15.sp,
                                   ),
                                 ),
                               ),

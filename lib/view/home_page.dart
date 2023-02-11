@@ -3,11 +3,12 @@ import 'package:childchamp/dialog/update_version_dialog.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/color_utils.dart';
+import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/utils/enum_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 import '../routs/router_helper.dart';
 import '../utils/assets_widget.dart';
@@ -47,8 +48,10 @@ class _HomePageState extends State<HomePage>
       vsync: this,
       duration: const Duration(seconds: 2),
     );
-    lngAnimation =
-        Tween<double>(begin: 0.0, end: 120.sp).animate(CurvedAnimation(
+    lngAnimation = Tween<double>(
+            begin: 0.0,
+            end: ConstUtils.deviceType == DeviceType.Phone ? 120.sp : 110.sp)
+        .animate(CurvedAnimation(
       parent: lngAnimationController,
       curve: Curves.bounceOut,
     ));
@@ -108,7 +111,7 @@ class _HomePageState extends State<HomePage>
             ),
             Positioned(
               top: 30.h,
-              left: 30.sp,
+              left: ConstUtils.deviceType == DeviceType.Phone ? 30.sp : 40.sp,
               child: InkWell(
                   onTap: () {
                     questionAnsViewModel
@@ -123,7 +126,7 @@ class _HomePageState extends State<HomePage>
             ),
             Positioned(
               top: 30.h,
-              right: 25.sp,
+              right: ConstUtils.deviceType == DeviceType.Phone ? 25.sp : 30.sp,
               child: InkWell(
                   onTap: () {
                     questionAnsViewModel
@@ -137,9 +140,11 @@ class _HomePageState extends State<HomePage>
                   )),
             ),
             Positioned(
-              top: (30.h + 110.sp),
-              right: 80.sp,
-              left: 80.sp,
+              top: ConstUtils.deviceType == DeviceType.Phone
+                  ? (30.h + 110.sp)
+                  : (30.h + 100.sp),
+              right: ConstUtils.deviceType == DeviceType.Phone ? 80.sp : 90.sp,
+              left: ConstUtils.deviceType == DeviceType.Phone ? 80.sp : 90.sp,
               child: InkWell(
                   onTap: () {
                     questionAnsViewModel
@@ -184,6 +189,7 @@ class _HomePageState extends State<HomePage>
                             ? Icons.music_note
                             : Icons.music_off,
                         color: ColorUtils.appWhite,
+                        size: 15.sp,
                       ),
                     ),
                   );

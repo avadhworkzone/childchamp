@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:open_store/open_store.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 Future<void> checkAppVersion() async {
   final snapShot = await FirebaseFirestore.instance

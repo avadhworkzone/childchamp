@@ -1,4 +1,14 @@
+import 'package:get/get.dart';
+
+import 'enum_utils.dart';
+
 class ConstUtils {
+  static DeviceType deviceType = DeviceType.Phone;
+
+  static void setDeviceType() {
+    deviceType = Get.height > 1000 ? DeviceType.Tablet : DeviceType.Phone;
+  }
+
   static String getGrade(num percent) {
     if (percent > 80) {
       return 'A';

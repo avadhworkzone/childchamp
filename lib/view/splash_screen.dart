@@ -2,10 +2,11 @@ import 'package:childchamp/dialog/update_version_dialog.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/assets_widget.dart';
 import 'package:childchamp/utils/color_utils.dart';
+import 'package:childchamp/utils/const_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 import '../routs/router_helper.dart';
 import '../utils/champ_assets.dart';
@@ -37,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen>
         Future.delayed(
           const Duration(seconds: 1),
           () {
+            ConstUtils.setDeviceType();
             Get.offAllNamed(RouteHelper.getHomePageRoute());
           },
         );
@@ -129,9 +131,12 @@ class ChampTextAnimation extends StatelessWidget {
     return PositionedTransition(
       rect: RelativeRectTween(
         begin: RelativeRect.fromSize(
-            Rect.fromLTWH(screenSize.width-5.w-110.sp, -170.sp, 160.sp, 70.sp), screenSize),
+            Rect.fromLTWH(
+                screenSize.width - 5.w - 110.sp, -170.sp, 160.sp, 70.sp),
+            screenSize),
         end: RelativeRect.fromSize(
-            Rect.fromLTWH(screenSize.width-5.w-190.sp, 22.h, 200.sp, 90.sp), screenSize),
+            Rect.fromLTWH(screenSize.width - 5.w - 190.sp, 22.h, 200.sp, 90.sp),
+            screenSize),
       ).animate(CurvedAnimation(
         parent: champController,
         curve: Curves.elasticOut,

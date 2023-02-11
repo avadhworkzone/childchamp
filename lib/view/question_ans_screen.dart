@@ -11,7 +11,7 @@ import 'package:childchamp/utils/sound_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 import '../routs/router_helper.dart';
 import '../utils/assets_widget.dart';
@@ -119,7 +119,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
 
                 ///OPTION 3.....
                 Positioned(
-                  top: (28.h + 95.sp) + 30.sp,
+                  top: (28.h + 95.sp)+3.h,
                   left: 50.sp,
                   child: RoundedOptionWidget(
                     selectAns: onOptionTap,
@@ -131,7 +131,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
 
                 ///OPTION 4.....
                 Positioned(
-                  top: (28.h + 95.sp) + 30.sp,
+                  top: (28.h + 95.sp) + 3.h,
                   right: 50.sp,
                   child: RoundedOptionWidget(
                     selectAns: onOptionTap,
@@ -147,17 +147,17 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
                   right: 0.sp,
                   left: 0.sp,
                   child: Container(
-                    height: 180.sp,
-                    padding: EdgeInsets.only(top: 40.sp),
+                    height: 30.h,
+                    padding: EdgeInsets.only(top: 6.h),
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: const AssetImage(ChampAssets.boyWithBoard),
-                            scale: 2.5.sp)),
+                            )),
                     child: ChampText(
                       questionAnsViewModel.questionList[
                               questionAnsViewModel.selectedOptionIndex]
                           .toUpperCase(),
-                      fontSize: 50.sp,
+                      fontSize: 10.h,
                       textAlign: TextAlign.center,
                       color:
                           Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
@@ -192,7 +192,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
                 //   ),
                 // ),
                 Positioned(
-                  top: 40.sp,
+                  top: 5.h,
                   left: 20.sp,
                   child: Row(
                     children: [
@@ -250,9 +250,10 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
                           decoration: const BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(ChampAssets.squareSolid))),
-                          child: const Icon(
+                          child:  Icon(
                             Icons.settings,
                             color: ColorUtils.appWhite,
+                            size: 15.sp,
                           ),
                         ),
                       )

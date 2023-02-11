@@ -3,3 +3,8 @@ enum QuestionType{
   Hindi,
   Gujrati
 }
+
+enum DeviceType{
+  Tablet,
+  Phone
+}

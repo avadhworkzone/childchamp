@@ -1,10 +1,13 @@
 import 'package:childchamp/utils/assets_widget.dart';
 import 'package:childchamp/utils/champ_assets.dart';
+import 'package:childchamp/utils/const_utils.dart';
+import 'package:childchamp/utils/enum_utils.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 import 'package:childchamp/viewmodel/question_ans_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 Future<void> ansAnimationDialog(
     {required bool rightAns, bool? complete}) async {
@@ -47,7 +50,7 @@ class ShowResultAnimation extends StatelessWidget {
                           : rightAns
                               ? ChampAssets.rightAnsAnimation
                               : ChampAssets.wrongAnsAnimation,
-                      imageScale: 1.5.sp,
+                      imageScale: ConstUtils.deviceType==DeviceType.Phone?1.5.sp:0.4.sp,
                     ),
                   )
                   .fadeOut(),

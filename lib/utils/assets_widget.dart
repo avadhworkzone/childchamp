@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 class ChampAssetsWidget extends StatelessWidget {
   const ChampAssetsWidget(

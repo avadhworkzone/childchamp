@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sizer/sizer.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 
 const _kShouldTestAsyncErrorOnInit = false;
 
@@ -70,20 +70,25 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      return GetMaterialApp(
-        title: TextUtils.appName,
-        navigatorKey: Get.key,
-        debugShowCheckedModeBanner: false,
-        initialRoute: RouteHelper.getSplashRoute(),
-        getPages: RouteHelper.routes,
+    return LayoutBuilder(
+      builder: (_, constrained) {
+        if (constrained.maxHeight == 0) {
+          return const Material();
+        }
+        return GetMaterialApp(
+          title: TextUtils.appName,
+          navigatorKey: Get.key,
+          debugShowCheckedModeBanner: false,
+          initialRoute: RouteHelper.getSplashRoute(),
+          getPages: RouteHelper.routes,
 
-        defaultTransition: Transition.fadeIn,
-        scrollBehavior: MyBehavior(),
-        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: false),
-        // home: HomePage(),
-      );
-    });
+          defaultTransition: Transition.fadeIn,
+          scrollBehavior: MyBehavior(),
+          theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: false),
+          // home: HomePage(),
+        );
+      },
+    );
   }
 
   SettingsViewModel settingsViewModel = Get.put(SettingsViewModel());
@@ -96,129 +101,5 @@ class MyBehavior extends ScrollBehavior {
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
-  }
-}
-
-
-class Screen1 extends StatelessWidget {
-  const Screen1({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('SCREEN 1'),
-      ),
-      body: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => Screen2());
-        },
-      ),
-    );
-  }
-}
-
-class Screen2 extends StatelessWidget {
-  const Screen2({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('SCREEN 2'),
-      ),
-      body: FloatingActionButton(
-        onPressed: () async {
-          final status = await Get.to(() => Screen3());
-          if (status) {
-            Get.dialog(SizedBox(
-              height: Get.height,
-              width: Get.width,
-              child: Stack(
-                children: [
-                  Container(
-                    color: Colors.green,
-                    height: Get.height,
-                    width: Get.width,
-                  ),
-                  AnimatedContainer(
-                    color: Colors.red,
-                    transform: Matrix4.translationValues(
-                        Get.width - 30.w, Get.height - 30.h, 0)
-                      ..scale(0.3),
-                    duration: Duration(seconds: 2),
-                  ),
-                ],
-              ),
-            ));
-          }
-          print('STATUS :=>$status');
-        },
-      ),
-    );
-  }
-}
-
-class Screen3 extends StatefulWidget {
-  const Screen3({Key? key}) : super(key: key);
-
-  @override
-  State<Screen3> createState() => _Screen3State();
-}
-
-class _Screen3State extends State<Screen3> {
-  bool isAnimated = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('SCREEN 3'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            isAnimated = !isAnimated;
-          });
-        },
-      ),
-      body: SizedBox(
-        height: Get.height,
-        width: Get.width,
-        child: Stack(
-          children: [
-            Container(
-              color: Colors.green,
-              height: Get.height,
-              width: Get.width,
-            ),
-            AnimatedContainer(
-              color: Colors.red,
-              transform: Matrix4.translationValues(
-                  !isAnimated ? 0 : Get.width - 40.w,
-                  !isAnimated ? 0 : Get.height - 45.h,
-                  0)
-                ..scale(!isAnimated?1.0:0.3),
-              duration: Duration(milliseconds: 500),
-              curve: Curves.fastOutSlowIn,
-            ),
-          ],
-        ),
-      ),
-      // body: Column(
-      //   children: [
-      //     TextButton(
-      //         onPressed: () {
-      //           Get.back(result: true);
-      //         },
-      //         child: Text('Call Started')),
-      //     TextButton(
-      //         onPressed: () {
-      //           Get.back(result: false);
-      //         },
-      //         child: Text('Call Ended')),
-      //   ],
-      // )
-    );
   }
 }
