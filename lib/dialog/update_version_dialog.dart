@@ -98,7 +98,7 @@ class SettingDialog extends StatelessWidget {
                         OpenStore.instance.open(
                           appStoreId: '', // AppStore id of your app
                           androidAppBundleId:
-                              'com.madvise.child_champ', // Android app bundle package name
+                              'com.kids.childchamp', // Android app bundle package name
                         );
                       },
                       child: ChampAssetsWidget(

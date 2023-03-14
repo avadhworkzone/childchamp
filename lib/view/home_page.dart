@@ -1,5 +1,6 @@
 import 'package:childchamp/dialog/final_result_dialog.dart';
 import 'package:childchamp/dialog/update_version_dialog.dart';
+import 'package:childchamp/service/google_ads_service.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/color_utils.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:childchamp/utils/extension_utils.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../routs/router_helper.dart';
 import '../utils/assets_widget.dart';
@@ -31,6 +33,7 @@ class _HomePageState extends State<HomePage>
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
   late AnimationController lngAnimationController;
   late Animation<double> lngAnimation;
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
@@ -55,7 +58,7 @@ class _HomePageState extends State<HomePage>
       parent: lngAnimationController,
       curve: Curves.bounceOut,
     ));
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       lngAnimationController.forward();
     });
   }
@@ -84,9 +87,69 @@ class _HomePageState extends State<HomePage>
     SoundService.stopBgPlayer();
   }
 
+  /// ================================== BANNER ADS CODE =============================== ///
+
+  @override
+  void didChangeDependencies() {
+    logs('didChangeDependencies CALL --------------------');
+    super.didChangeDependencies();
+    _loadAd();
+  }
+
+  void _loadAd()async{
+    await _bannerAd?.dispose();
+    setState(() {
+      _bannerAd = null;
+    });
+    final AnchoredAdaptiveBannerAdSize? size =
+    await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+        // ignore: use_build_context_synchronously
+        MediaQuery.of(context).size.width.truncate());
+
+    if (size == null) {
+      print('Unable to get height of anchored banner.');
+      return;
+    }
+    _bannerAd = BannerAd(
+      adUnitId: GoogleAdsService.bannerAdsKey,
+      size: size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          print('$ad loaded: ${ad.responseInfo}');
+          setState(() {
+            // When the ad is loaded, get the ad size and use it to set
+            // the height of the ad container.
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print('Anchored adaptive banner failedToLoad: $error');
+          ad.dispose();
+        },
+      ),
+    );
+    return _bannerAd!.load();
+  }
+
+  Widget _getAdWidget() {
+    if(_bannerAd==null){
+      return const SizedBox.shrink();
+    }
+    return SizedBox(
+      height: 60,
+      width: Get.width,
+      child: AdWidget(
+        key: ValueKey(_bannerAd?.adUnitId ?? '0'),
+        ad: _bannerAd!,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -94,6 +157,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Material(
       color: ColorUtils.appWhite,
+
       child: SizedBox(
         height: Get.height,
         width: Get.width,
@@ -117,6 +181,7 @@ class _HomePageState extends State<HomePage>
                     questionAnsViewModel
                         .setQuestionList(TextUtils.englishAlphabet);
                     questionAnsViewModel.questionType = QuestionType.English;
+                    onAddShow();
                     Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
                   },
                   child: AnimationBox(
@@ -132,6 +197,7 @@ class _HomePageState extends State<HomePage>
                     questionAnsViewModel
                         .setQuestionList(TextUtils.gujaratiVyanjan);
                     questionAnsViewModel.questionType = QuestionType.Gujrati;
+                    onAddShow();
                     Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
                   },
                   child: AnimationBox(
@@ -150,6 +216,7 @@ class _HomePageState extends State<HomePage>
                     questionAnsViewModel
                         .setQuestionList(TextUtils.hindiVyanjan);
                     questionAnsViewModel.questionType = QuestionType.Hindi;
+                    onAddShow();
                     Get.toNamed(RouteHelper.getQuestionAnsScreenRoute());
                   },
                   child: AnimationBox(
@@ -196,10 +263,23 @@ class _HomePageState extends State<HomePage>
                 },
               ),
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _getAdWidget(),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void onAddShow() {
+    print('ConstUtils.lanSelectAdsCount:=>${ConstUtils.lanSelectAdsCount}');
+    if (ConstUtils.lanSelectAdsCount == 2 ||
+        (ConstUtils.lanSelectAdsCount % 5 == 0)) {
+      GoogleAdsService.showInterstitialAd();
+    }
+    ConstUtils.lanSelectAdsCount++;
   }
 }
 

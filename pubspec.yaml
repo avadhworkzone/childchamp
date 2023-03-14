@@ -54,6 +54,8 @@ dependencies:
   # OPEN PLAY STORE OR APP STORE
   open_store: ^0.5.0
 
+  # ADS
+  google_mobile_ads: ^2.3.0
 
 
 dev_dependencies:

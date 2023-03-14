@@ -1,7 +1,7 @@
 import 'package:package_info_plus/package_info_plus.dart';
 
 class TextUtils {
-  static const appName = "Child Champ";
+  static const appName = "Kids Champ";
   static const updateMsg =
       'A new version is available. Update the app to continue.';
   static String appVersion = "";

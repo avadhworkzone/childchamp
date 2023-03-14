@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:childchamp/routs/router_helper.dart';
+import 'package:childchamp/service/google_ads_service.dart';
 import 'package:childchamp/utils/text_utils.dart';
 import 'package:childchamp/view/home_page.dart';
 import 'package:childchamp/viewmodel/question_ans_viewmodel.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:childchamp/utils/extension_utils.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 const _kShouldTestAsyncErrorOnInit = false;
 
@@ -22,12 +24,14 @@ Future<void> main() async {
     await Firebase.initializeApp();
     await GetStorage.init();
     await TextUtils.getAppVersion();
+    MobileAds.instance.initialize();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     runApp(MyApp());
   }, (error, stackTrace) {
+    print('ERROR :=>> $error');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
@@ -44,9 +48,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    initializeFlutterFireFuture = _initializeFlutterFire();
-
+    init();
     super.initState();
+  }
+
+  Future<void> init() async {
+    initializeFlutterFireFuture = _initializeFlutterFire();
+    GoogleAdsService.getAdsKeyFromFirebase();
+    // GoogleAdsService.loadAppOpenAd();
   }
 
   Future<void> _testAsyncErrorOnInit() async {
@@ -66,6 +75,12 @@ class _MyAppState extends State<MyApp> {
     if (_kShouldTestAsyncErrorOnInit) {
       await _testAsyncErrorOnInit();
     }
+  }
+
+  @override
+  void dispose() {
+    GoogleAdsService.disposeAdsController();
+    super.dispose();
   }
 
   @override

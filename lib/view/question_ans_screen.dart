@@ -4,14 +4,17 @@ import 'dart:math' as math;
 import 'package:childchamp/dialog/ans_animation_dialog.dart';
 import 'package:childchamp/dialog/final_result_dialog.dart';
 import 'package:childchamp/dialog/setting_dialog.dart';
+import 'package:childchamp/service/google_ads_service.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
+import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/utils/enum_utils.dart';
 import 'package:childchamp/utils/sound_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:childchamp/utils/extension_utils.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../routs/router_helper.dart';
 import '../utils/assets_widget.dart';
@@ -32,6 +35,8 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
     with WidgetsBindingObserver {
   final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
   bool isBackGround = false;
+
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
@@ -65,11 +70,74 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
     SoundService.stopBgPlayer();
   }
 
+
+
+  /// ================================== BANNER ADS CODE =============================== ///
+
+  @override
+  void didChangeDependencies() {
+    logs('didChangeDependencies CALL --------------------');
+    super.didChangeDependencies();
+    _loadAd();
+  }
+
+  void _loadAd()async{
+    await _bannerAd?.dispose();
+    setState(() {
+      _bannerAd = null;
+    });
+    final AnchoredAdaptiveBannerAdSize? size =
+    await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+      // ignore: use_build_context_synchronously
+        MediaQuery.of(context).size.width.truncate());
+
+    if (size == null) {
+      print('Unable to get height of anchored banner.');
+      return;
+    }
+    _bannerAd = BannerAd(
+      adUnitId: GoogleAdsService.bannerAdsKey,
+      size: size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          print('$ad loaded: ${ad.responseInfo}');
+          setState(() {
+            // When the ad is loaded, get the ad size and use it to set
+            // the height of the ad container.
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print('Anchored adaptive banner failedToLoad: $error');
+          ad.dispose();
+        },
+      ),
+    );
+    return _bannerAd!.load();
+  }
+
+  Widget _getAdWidget() {
+    if(_bannerAd==null){
+      return const SizedBox.shrink();
+    }
+    return SizedBox(
+      height: 60,
+      width: Get.width,
+      child: AdWidget(
+        key: ValueKey(_bannerAd?.adUnitId ?? '0'),
+        ad: _bannerAd!,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _bannerAd?.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -260,6 +328,11 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
                     ],
                   ),
                 ),
+
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _getAdWidget(),
+                ),
               ],
             ),
           );
@@ -276,6 +349,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
       managedOption();
       return;
     }
+    onAddShow();
     questionAnsViewModel.selectedOptionIndex++;
     managedOption();
   }
@@ -299,6 +373,16 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
           math.Random().nextInt(3), questionAnsViewModel.selectedOptionIndex);
     }
     questionAnsViewModel.setOptionList(tempOptionList);
+  }
+
+
+  void onAddShow() {
+    print('ConstUtils.queAdsCount:=>${ConstUtils.queAdsCount}');
+    if (
+        (ConstUtils.queAdsCount % 10 == 0)) {
+      GoogleAdsService.showInterstitialAd();
+    }
+    ConstUtils.queAdsCount++;
   }
 }
 

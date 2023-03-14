@@ -8,7 +8,7 @@
 PRODUCT_NAME = childchamp
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.madvise.child_champ
+PRODUCT_BUNDLE_IDENTIFIER = com.kids.childchamp
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
