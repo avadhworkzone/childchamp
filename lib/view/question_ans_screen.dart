@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:childchamp/dialog/ans_animation_dialog.dart';
@@ -9,20 +8,16 @@ import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/utils/enum_utils.dart';
-import 'package:childchamp/utils/sound_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:get/get.dart';
 import 'package:childchamp/utils/extension_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../routs/router_helper.dart';
 import '../utils/assets_widget.dart';
 import '../utils/champ_assets.dart';
 import '../utils/color_utils.dart';
 import '../utils/preference_manager_utils.dart';
 import '../viewmodel/question_ans_viewmodel.dart';
-import '../viewmodel/setting_viewmodel.dart';
 
 class QuestionAnsScreen extends StatefulWidget {
   QuestionAnsScreen({Key? key}) : super(key: key);
@@ -70,8 +65,6 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
     SoundService.stopBgPlayer();
   }
 
-
-
   /// ================================== BANNER ADS CODE =============================== ///
 
   @override
@@ -81,15 +74,15 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
     _loadAd();
   }
 
-  void _loadAd()async{
+  void _loadAd() async {
     await _bannerAd?.dispose();
     setState(() {
       _bannerAd = null;
     });
     final AnchoredAdaptiveBannerAdSize? size =
-    await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-      // ignore: use_build_context_synchronously
-        MediaQuery.of(context).size.width.truncate());
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            // ignore: use_build_context_synchronously
+            MediaQuery.of(context).size.width.truncate());
 
     if (size == null) {
       print('Unable to get height of anchored banner.');
@@ -118,7 +111,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
   }
 
   Widget _getAdWidget() {
-    if(_bannerAd==null){
+    if (_bannerAd == null) {
       return const SizedBox.shrink();
     }
     return SizedBox(
@@ -138,13 +131,11 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Material(
       color: ColorUtils.appWhite,
       child: GetBuilder<QuestionAnsViewModel>(
-
         builder: (questionAnsViewModel) {
           return SizedBox(
             height: Get.height,
@@ -187,7 +178,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
 
                 ///OPTION 3.....
                 Positioned(
-                  top: (28.h + 95.sp)+3.h,
+                  top: (28.h + 95.sp) + 3.h,
                   left: 50.sp,
                   child: RoundedOptionWidget(
                     selectAns: onOptionTap,
@@ -219,8 +210,8 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
                     padding: EdgeInsets.only(top: 6.h),
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: const AssetImage(ChampAssets.boyWithBoard),
-                            )),
+                      image: const AssetImage(ChampAssets.boyWithBoard),
+                    )),
                     child: ChampText(
                       questionAnsViewModel.questionList[
                               questionAnsViewModel.selectedOptionIndex]
@@ -318,7 +309,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
                           decoration: const BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(ChampAssets.squareSolid))),
-                          child:  Icon(
+                          child: Icon(
                             Icons.settings,
                             color: ColorUtils.appWhite,
                             size: 15.sp,
@@ -375,11 +366,9 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
     questionAnsViewModel.setOptionList(tempOptionList);
   }
 
-
   void onAddShow() {
     print('ConstUtils.queAdsCount:=>${ConstUtils.queAdsCount}');
-    if (
-        (ConstUtils.queAdsCount % 10 == 0)) {
+    if ((ConstUtils.queAdsCount % 10 == 0)) {
       GoogleAdsService.showInterstitialAd();
     }
     ConstUtils.queAdsCount++;

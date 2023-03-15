@@ -1,9 +1,9 @@
-# childchamp
+# kidschamp
 
 [//]: # (FLUTTER SDK 3.3.9)
 [//]: # (LAST VERSION)
-[//]: # (flutter.versionName=1.0.4)
-[//]: # (flutter.versionCode=5)
+[//]: # (flutter.versionName=1.0.0)
+[//]: # (flutter.versionCode=1)
 
 
 
