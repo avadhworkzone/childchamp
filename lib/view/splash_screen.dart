@@ -1,12 +1,10 @@
-import 'package:childchamp/dialog/update_version_dialog.dart';
 import 'package:childchamp/service/sound_service.dart';
 import 'package:childchamp/utils/assets_widget.dart';
 import 'package:childchamp/utils/color_utils.dart';
 import 'package:childchamp/utils/const_utils.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:childchamp/utils/extension_utils.dart';
 
 import '../routs/router_helper.dart';
 import '../utils/champ_assets.dart';
@@ -14,6 +12,8 @@ import '../utils/preference_manager_utils.dart';
 import '../viewmodel/setting_viewmodel.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:childchamp/routs/router_helper.dart';
 import 'package:childchamp/service/google_ads_service.dart';
+import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/utils/text_utils.dart';
-import 'package:childchamp/view/home_page.dart';
 import 'package:childchamp/viewmodel/question_ans_viewmodel.dart';
 import 'package:childchamp/viewmodel/setting_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:childchamp/utils/extension_utils.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 const _kShouldTestAsyncErrorOnInit = false;
@@ -29,15 +28,15 @@ Future<void> main() async {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    runApp(MyApp());
+    runApp(const MyApp());
   }, (error, stackTrace) {
-    print('ERROR :=>> $error');
+    logs('ERROR :=>> $error');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -61,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> _testAsyncErrorOnInit() async {
     Future<void>.delayed(const Duration(seconds: 2), () {
       final List<int> list = <int>[];
-      print(list[100]);
+      logs('${list[100]}');
     });
   }
 

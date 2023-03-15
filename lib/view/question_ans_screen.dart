@@ -20,7 +20,7 @@ import '../utils/preference_manager_utils.dart';
 import '../viewmodel/question_ans_viewmodel.dart';
 
 class QuestionAnsScreen extends StatefulWidget {
-  QuestionAnsScreen({Key? key}) : super(key: key);
+  const QuestionAnsScreen({Key? key}) : super(key: key);
 
   @override
   State<QuestionAnsScreen> createState() => _QuestionAnsScreenState();
@@ -53,7 +53,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
   }
 
   void playBgMusic() {
-    print(
+    logs(
         'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic)}');
     if (PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic) &&
         !isBackGround) {
@@ -85,7 +85,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
             MediaQuery.of(context).size.width.truncate());
 
     if (size == null) {
-      print('Unable to get height of anchored banner.');
+      logs('Unable to get height of anchored banner.');
       return;
     }
     _bannerAd = BannerAd(
@@ -94,7 +94,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('$ad loaded: ${ad.responseInfo}');
+          logs('$ad loaded: ${ad.responseInfo}');
           setState(() {
             // When the ad is loaded, get the ad size and use it to set
             // the height of the ad container.
@@ -102,7 +102,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
           });
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Anchored adaptive banner failedToLoad: $error');
+          logs('Anchored adaptive banner failedToLoad: $error');
           ad.dispose();
         },
       ),
@@ -208,9 +208,9 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
                   child: Container(
                     height: 30.h,
                     padding: EdgeInsets.only(top: 6.h),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
-                      image: const AssetImage(ChampAssets.boyWithBoard),
+                      image: AssetImage(ChampAssets.boyWithBoard),
                     )),
                     child: ChampText(
                       questionAnsViewModel.questionList[
@@ -367,7 +367,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
   }
 
   void onAddShow() {
-    print('ConstUtils.queAdsCount:=>${ConstUtils.queAdsCount}');
+    logs('ConstUtils.queAdsCount:=>${ConstUtils.queAdsCount}');
     if ((ConstUtils.queAdsCount % 10 == 0)) {
       GoogleAdsService.showInterstitialAd();
     }

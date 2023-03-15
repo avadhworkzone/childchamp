@@ -7,7 +7,6 @@ import 'package:childchamp/viewmodel/question_ans_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:childchamp/utils/extension_utils.dart';
 
 Future<void> ansAnimationDialog(
     {required bool rightAns, bool? complete}) async {

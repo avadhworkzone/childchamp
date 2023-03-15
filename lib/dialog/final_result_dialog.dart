@@ -51,7 +51,7 @@ class ResultDialog extends StatelessWidget {
                       children: [
                         ChampAssetsWidget(
                           imagePath: ChampAssets.resultTitleImg,
-                          imageScale:Get.height>1000? 0.7.w:3.w,
+                          imageScale: Get.height > 1000 ? 0.3.w : 0.7.w,
                         ),
                         SizedBox(
                           height: 8.h,
@@ -133,7 +133,7 @@ class ResultDialog extends StatelessWidget {
                                   35
                               ? ChampAssets.failImage
                               : ChampAssets.winnerImage,
-                          imageScale: 0.6.h,
+                          imageScale: 0.3.h,
                         ),
                         SizedBox(
                           height: 5.h,
@@ -158,7 +158,7 @@ class ResultDialog extends StatelessWidget {
                                       image: DecorationImage(
                                           image: AssetImage(
                                               ChampAssets.roundedSolid))),
-                                  child:  Icon(
+                                  child: Icon(
                                     Icons.refresh,
                                     color: ColorUtils.appWhite,
                                     size: 15.sp,
@@ -184,7 +184,7 @@ class ResultDialog extends StatelessWidget {
                                       image: DecorationImage(
                                           image: AssetImage(
                                               ChampAssets.roundedSolid))),
-                                  child:  Icon(
+                                  child: Icon(
                                     Icons.menu,
                                     color: ColorUtils.appWhite,
                                     size: 15.sp,

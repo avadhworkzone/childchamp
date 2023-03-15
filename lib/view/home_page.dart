@@ -1,15 +1,12 @@
-import 'package:childchamp/dialog/final_result_dialog.dart';
 import 'package:childchamp/dialog/update_version_dialog.dart';
 import 'package:childchamp/service/google_ads_service.dart';
 import 'package:childchamp/service/sound_service.dart';
-import 'package:childchamp/utils/champ_text.dart';
 import 'package:childchamp/utils/color_utils.dart';
 import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/utils/enum_utils.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:childchamp/utils/extension_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:childchamp/utils/extension_utils.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../routs/router_helper.dart';
@@ -21,7 +18,7 @@ import '../viewmodel/question_ans_viewmodel.dart';
 import '../viewmodel/setting_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -75,7 +72,7 @@ class _HomePageState extends State<HomePage>
   }
 
   void playBgMusic() {
-    print(
+    logs(
         'isBackGround :=>$isBackGround settingsViewModel.bgMusic:=>${PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic)}');
     if (PreferenceManagerUtils.getPreference(PreferenceManagerUtils.bgMusic) &&
         !isBackGround) {
@@ -96,18 +93,18 @@ class _HomePageState extends State<HomePage>
     _loadAd();
   }
 
-  void _loadAd()async{
+  void _loadAd() async {
     await _bannerAd?.dispose();
     setState(() {
       _bannerAd = null;
     });
     final AnchoredAdaptiveBannerAdSize? size =
-    await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-        // ignore: use_build_context_synchronously
-        MediaQuery.of(context).size.width.truncate());
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            // ignore: use_build_context_synchronously
+            MediaQuery.of(context).size.width.truncate());
 
     if (size == null) {
-      print('Unable to get height of anchored banner.');
+      logs('Unable to get height of anchored banner.');
       return;
     }
     _bannerAd = BannerAd(
@@ -116,7 +113,7 @@ class _HomePageState extends State<HomePage>
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('$ad loaded: ${ad.responseInfo}');
+          logs('$ad loaded: ${ad.responseInfo}');
           setState(() {
             // When the ad is loaded, get the ad size and use it to set
             // the height of the ad container.
@@ -124,7 +121,7 @@ class _HomePageState extends State<HomePage>
           });
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Anchored adaptive banner failedToLoad: $error');
+          logs('Anchored adaptive banner failedToLoad: $error');
           ad.dispose();
         },
       ),
@@ -133,7 +130,7 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _getAdWidget() {
-    if(_bannerAd==null){
+    if (_bannerAd == null) {
       return const SizedBox.shrink();
     }
     return SizedBox(
@@ -157,7 +154,6 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Material(
       color: ColorUtils.appWhite,
-
       child: SizedBox(
         height: Get.height,
         width: Get.width,
@@ -274,7 +270,7 @@ class _HomePageState extends State<HomePage>
   }
 
   void onAddShow() {
-    print('ConstUtils.lanSelectAdsCount:=>${ConstUtils.lanSelectAdsCount}');
+    logs('ConstUtils.lanSelectAdsCount:=>${ConstUtils.lanSelectAdsCount}');
     if (ConstUtils.lanSelectAdsCount == 2 ||
         (ConstUtils.lanSelectAdsCount % 5 == 0)) {
       GoogleAdsService.showInterstitialAd();

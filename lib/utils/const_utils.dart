@@ -4,16 +4,15 @@ import 'package:get/get.dart';
 import 'enum_utils.dart';
 
 void logs(String message) {
-  if (!kDebugMode) {
+  if (kDebugMode) {
     print(message);
   }
 }
 
-
 class ConstUtils {
   static DeviceType deviceType = DeviceType.Phone;
-  static int lanSelectAdsCount=1;
-  static int queAdsCount=1;
+  static int lanSelectAdsCount = 1;
+  static int queAdsCount = 1;
 
   static void setDeviceType() {
     deviceType = Get.height > 1000 ? DeviceType.Tablet : DeviceType.Phone;

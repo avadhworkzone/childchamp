@@ -137,7 +137,7 @@ class SettingDialog extends StatelessWidget {
                           decoration: const BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(ChampAssets.roundedSolid))),
-                          child:  Icon(
+                          child: Icon(
                             Icons.menu,
                             color: ColorUtils.appWhite,
                             size: 15.sp,

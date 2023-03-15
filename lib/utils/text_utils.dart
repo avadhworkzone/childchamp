@@ -1,3 +1,4 @@
+import 'package:childchamp/utils/const_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class TextUtils {
@@ -10,7 +11,7 @@ class TextUtils {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion = packageInfo.version;
     // print("APP BUILD APP ${appName}");
-    print("APP BUILD APP ${packageInfo}");
+    logs("APP BUILD APP $packageInfo");
     // print("APP BUILD APP ${packageInfo.buildNumber}");
     // print("APP BUILD APP ${appVersion}");
     // buildNumber = packageInfo.buildNumber;

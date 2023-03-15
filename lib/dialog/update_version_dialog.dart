@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:childchamp/utils/assets_widget.dart';
 import 'package:childchamp/utils/champ_assets.dart';
 import 'package:childchamp/utils/champ_text.dart';
+import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/utils/text_utils.dart';
 import 'package:childchamp/viewmodel/setting_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,7 +34,7 @@ Future<void> checkAppVersion() async {
         newVersion = int.parse(appVersion);
       }
     }
-    print('NEW VERSION : $newVersion CURRENT VERSION :$currentVersion');
+    logs('NEW VERSION : $newVersion CURRENT VERSION :$currentVersion');
     if (newVersion > currentVersion) {
       updateVersionDialog();
     }
@@ -85,7 +86,7 @@ class SettingDialog extends StatelessWidget {
                       textAlign: TextAlign.center,
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xff6B2D33),
+                      color: const Color(0xff6B2D33),
                     ),
                   ),
                 ),
@@ -103,7 +104,7 @@ class SettingDialog extends StatelessWidget {
                       },
                       child: ChampAssetsWidget(
                         imagePath: ChampAssets.updateBtn,
-                        imageScale: 3.2.w,
+                        imageScale: 0.8.w,
                       ),
                     ),
                   ),
