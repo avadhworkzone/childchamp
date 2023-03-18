@@ -271,8 +271,8 @@ class _HomePageState extends State<HomePage>
 
   void onAddShow() {
     logs('ConstUtils.lanSelectAdsCount:=>${ConstUtils.lanSelectAdsCount}');
-    if (ConstUtils.lanSelectAdsCount == 2 ||
-        (ConstUtils.lanSelectAdsCount % 5 == 0)) {
+    if (ConstUtils.lanSelectAdsCount == 1 ||
+        (ConstUtils.lanSelectAdsCount % 3 == 0)) {
       GoogleAdsService.showInterstitialAd();
     }
     ConstUtils.lanSelectAdsCount++;

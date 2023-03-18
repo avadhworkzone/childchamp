@@ -7,6 +7,7 @@ import 'package:childchamp/utils/const_utils.dart';
 import 'package:childchamp/utils/text_utils.dart';
 import 'package:childchamp/viewmodel/setting_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:open_store/open_store.dart';
@@ -14,7 +15,7 @@ import 'package:childchamp/utils/extension_utils.dart';
 
 Future<void> checkAppVersion() async {
   final snapShot = await FirebaseFirestore.instance
-      .collection('AppVersion')
+      .collection(kDebugMode?"AppVersionDev":'AppVersion')
       .doc('AppVersion')
       .get();
   if (snapShot.exists) {

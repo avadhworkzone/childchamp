@@ -368,7 +368,7 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
 
   void onAddShow() {
     logs('ConstUtils.queAdsCount:=>${ConstUtils.queAdsCount}');
-    if ((ConstUtils.queAdsCount % 10 == 0)) {
+    if ((ConstUtils.queAdsCount % 4 == 0)) {
       GoogleAdsService.showInterstitialAd();
     }
     ConstUtils.queAdsCount++;
