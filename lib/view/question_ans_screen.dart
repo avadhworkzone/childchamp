@@ -348,6 +348,16 @@ class _QuestionAnsScreenState extends State<QuestionAnsScreen>
   ///GENERATE RANDOM OPTION AND SET ONE ANS.
   void managedOption() {
     List<int> tempOptionList = [];
+    if (questionAnsViewModel.questionType == QuestionType.English) {
+      final path =
+          "assets/sound/eng/a_to_z/eng${questionAnsViewModel.selectedOptionIndex}.mp3";
+      SoundService.setAlphabetPlayer(path);
+    } else if (questionAnsViewModel.questionType == QuestionType.Gujrati ||
+        questionAnsViewModel.questionType == QuestionType.Hindi) {
+      final path =
+          "assets/sound/guj/guj_option/guj${questionAnsViewModel.selectedOptionIndex}.mp3";
+      SoundService.setAlphabetPlayer(path);
+    }
     for (int optionIndex = 0; optionIndex < 1000; optionIndex++) {
       if (tempOptionList.length == 4) {
         break;
@@ -400,7 +410,20 @@ class RoundedOptionWidget extends StatelessWidget {
         onTap: () async {
           final questionAnsViewModel = Get.find<QuestionAnsViewModel>();
           final queId = questionAnsViewModel.selectedOptionIndex;
+
           if (queId == optionId) {
+            if (questionAnsViewModel.questionType == QuestionType.English) {
+              final path = "assets/sound/eng/engW$queId.mp3";
+              SoundService.setAlphabetWordPlayer(path);
+            } else if (questionAnsViewModel.questionType ==
+                QuestionType.Gujrati) {
+              final path = "assets/sound/guj/gujW$queId.mp3";
+              SoundService.setAlphabetWordPlayer(path);
+            } else {
+              final path = "assets/sound/hin/hinW$queId.mp3";
+              SoundService.setAlphabetWordPlayer(path);
+            }
+
             questionAnsViewModel.winCount++;
             if (PreferenceManagerUtils.getPreference(
                     PreferenceManagerUtils.volume) ==
@@ -408,6 +431,8 @@ class RoundedOptionWidget extends StatelessWidget {
               // SoundService.setPlayer(SoundUtils.winSound);
             }
           } else {
+            const path = "assets/sound/wrong.mp3";
+            SoundService.setAlphabetWordPlayer(path);
             questionAnsViewModel.lostCount++;
             if (PreferenceManagerUtils.getPreference(
                     PreferenceManagerUtils.volume) ==

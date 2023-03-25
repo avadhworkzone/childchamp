@@ -4,6 +4,8 @@ import 'package:just_audio/just_audio.dart';
 class SoundService {
   static final player = AudioPlayer();
   static final bgPlayer = AudioPlayer();
+  static final alphabetOptionPlayer = AudioPlayer();
+  static final alphabetWordPlayer = AudioPlayer();
 
   /// WIN LOSE SOUND
   static Future<void> setPlayer(String path) async {
@@ -17,6 +19,35 @@ class SoundService {
 
   static void disposePlayer() {
     player.dispose();
+  }
+
+  /// ALPHABET SOUND
+  static Future<void> setAlphabetPlayer(String path) async {
+    await alphabetOptionPlayer.setAsset(path);
+    await alphabetOptionPlayer.setSpeed(0.7);
+    alphabetOptionPlayer.play();
+  }
+
+  static void stopAlphabetPlayer() {
+    alphabetOptionPlayer.stop();
+  }
+
+  static void disposeAlphabetPlayer() {
+    alphabetOptionPlayer.dispose();
+  }
+
+  /// ALPHABET WORD SOUND
+  static Future<void> setAlphabetWordPlayer(String path) async {
+    await alphabetWordPlayer.setAsset(path);
+    alphabetWordPlayer.play();
+  }
+
+  static void stopAlphabetWordPlayer() {
+    alphabetWordPlayer.stop();
+  }
+
+  static void disposeAlphabetWordPlayer() {
+    alphabetWordPlayer.dispose();
   }
 
   /// BACKGROUND SOUND
